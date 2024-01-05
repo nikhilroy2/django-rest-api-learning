@@ -1,0 +1,23 @@
+.custom_list {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 300px;
+  overflow: auto;
+  border: 1px solid #dee2e6;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  background: #fff;
+  width: 100%;
+}
+.custom_list .custom_list_item {
+  padding: 8px;
+}
+.custom_list img {
+  height: 35px;
+}

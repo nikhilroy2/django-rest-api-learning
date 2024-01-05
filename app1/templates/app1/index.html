@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,6 +9,7 @@
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.2/css/bootstrap.min.css'
         integrity='sha512-b2QcS5SsA8tZodcDtGRELiGv5SaKSk1vDHDaQRda0htPYWZ6046lr3kJ5bAAQdpV2mmA/4v0wQF9MyU6/pDIAg=='
         crossorigin='anonymous' />
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
 <body>
@@ -21,21 +23,26 @@
                 <h4>Your Form</h4>
                 <form action="">
                     <div class="form_wrapper">
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="" class="form-label">Name:</label>
                             <input type="text" name="name_value" class="form-control">
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="" class="form-label">Number: </label>
                             <input type="number" name="number_value" class="form-control">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-3 position-relative">
                             <label for="" class="form-label">Country: </label>
-                            <input type="text" name="country_value" class="form-control">
+                            <!-- <input type="text" name="country_value" class="form-control"> -->
+                            <select name="country_value" id="country_name" class="form-select">
+                                {% for country in country_list %}
+                                    <option {% if country.name == 'Bangladesh' %} selected {% endif %} value="{{country.name}}" data-country-img="{{country.image}}">{{country.name}}</option>
+                                {% endfor %}
+                            </select>
                         </div>
-                        <div class="form-group">
-                            <button id="form_submit" type="button">Submit</button>
+                        <div class="form-group my-3 text-center">
+                            <button id="form_submit" class="btn btn-primary" type="button">Submit</button>
                         </div>
                     </div>
                 </form>
@@ -44,7 +51,7 @@
                     Table View
                 </h4>
 
-                <table>
+                <table class="table table-hover">
                     <thead>
                         <tr>
                             <th>
@@ -70,71 +77,11 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js'
         integrity='sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=='
         crossorigin='anonymous'></script>
-
     <script>
-        function getAjax() {
-            $('#table_body').html(`<tr> <td colspan="4" class="text-center"> <div class="p-3 text-center"> <span class="spinner-border"> </span> </div> <td> </tr>`)
-            $.ajax({
-                url: '/api/personal',
-                method: 'get',
-                success: function (data) {
-                    // console.log(data)
-                    $('#table_body').html('')
-                    data.forEach((v, i) => {
-                        $('#table_body').append(`
-                            <tr> 
-                                <td> ${i + 1} </td>
-                                <td> ${v.name} </td>
-                                <td> ${v.number} </td>
-                                <td> ${v.country} </td>
-                                </tr>
-                        `)
-                    })
-                },
-                error: function (data) {
-
-                }
-            })
-        }
-
-        getAjax() // init
-
-        function postAjax() {
-            const ajax_data = {
-                name: $('[name="name_value"]').val(),
-                number: $('[name="number_value"]').val(),
-                country: $('[name="country_value"]').val(),
-            }
-
-            $('#form_submit').addClass('disabled').attr('disabled', 'disabled')
-            $.ajax({
-                url: '/api/personal',
-                method: 'post',
-                data: ajax_data,
-                headers: {
-                    'X-CSRF-TOKEN': '{{csrf_token}}'
-                },
-                success: function (data) {
-                    console.log(data)
-                    $('#form_submit').removeClass('disabled').removeAttr('disabled');
-                    getAjax() // update
-
-                },
-                error: function (data) {
-                    console.log(data)
-                    $('#form_submit').removeClass('disabled').removeAttr('disabled')
-
-                }
-            })
-        }
-
-        $('#form_submit').on('click', function () {
-            let _self = $(this);
-            postAjax() // init
-        })
-
-        
+        window.csrf_token = '{{csrf_token}}'
     </script>
+    <script src="{% static 'js/script.js' %}"></script>
+    
 </body>
 
 </html>
